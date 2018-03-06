@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="10dp"
+    android:background="#dddddd"
+    android:id="@+id/lamp_item_wrapper"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/lamp_img"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_weight="0"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/lamp_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:layout_gravity="center"
+        android:paddingStart="4dp"
+        android:paddingEnd="0dp"
+        android:textSize="20dp"
+        android:text="Lamp"/>
+
+    <Switch
+        android:id="@+id/lamp_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:layout_gravity="center"/>
+
+
+</LinearLayout>
+
+
+<!-- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#cccccc"
+    android:padding="16dp"
+    >
+
+    <View
+        android:layout_width="match_parent"
+        android:id="@+id/a"
+        android:layout_height="300dp"
+
+        android:background="#FF0000"
+        android:layout_margin="16dp"
+    />
+
+    <View
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:id="@+id/b"
+        android:layout_below="@id/a"
+        android:layout_toLeftOf="@id/c"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg"
+        />
+
+        <View
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:id="@+id/c"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/a"
+            android:layout_margin="16dp"
+            android:background="#80FFFF00"
+            />
+
+
+</RelativeLayout> -->
