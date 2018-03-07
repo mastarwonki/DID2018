@@ -110,7 +110,7 @@ public class TcpClient {
 
             } catch (Exception e) {
 
-                Log.e("TCP", "S: Error", e);
+                //Log.e("TCP", "S: Error", e);
 
             } finally {
                 //the socket must be closed. It is not possible to reconnect to this socket

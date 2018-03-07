@@ -45,10 +45,15 @@ public class LampActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if (tcpClient != null) {
             tcpClient.stopClient();
+            tcpClient = null;
+        }
+        if(connectTask != null && tcpClient == null){
+            connectTask.cancel(true);
+            connectTask = null;
         }
     }
 
@@ -65,7 +70,7 @@ public class LampActivity extends AppCompatActivity {
         tcpClient = new TcpClient(new TcpClient.OnMessageReceived() {
             @Override
             //here the messageReceived method is implemented
-            public void messageReceived(String message) {
+            public void messageReceived(final String message) {
                 //this method calls the onProgressUpdate
                 // Get a handler that can be used to post to the main thread
                 Handler mainHandler = new Handler(getApplicationContext().getMainLooper());
@@ -75,7 +80,7 @@ public class LampActivity extends AppCompatActivity {
 
 
                         // DANILO LAVORA QUA
-                        sb.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
 
 

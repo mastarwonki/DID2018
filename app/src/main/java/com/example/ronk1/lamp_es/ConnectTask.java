@@ -2,6 +2,8 @@ package com.example.ronk1.lamp_es;
 
 import android.os.AsyncTask;
 
+import java.net.SocketException;
+
 /**
  * Created by Ronk1 on 07/03/18.
  */
