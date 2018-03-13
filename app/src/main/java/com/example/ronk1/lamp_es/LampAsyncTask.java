@@ -56,22 +56,31 @@ public class LampAsyncTask extends AsyncTask<String,Integer, Long> {
 
             try {
 
-
                 socket.setSoTimeout(5000);
                 socket.receive(packet);
                 message = new String(lmessage, 0, packet.getLength());
                 Log.e("UDP Receive", message);
                 // TODO ADD IMG TO LAMP
                 //lamp.setPicture(img);
-                Lamp lamp = new Lamp(message);
-                lamp.setName("Lampada " + message);
-                LampManager.getInstance().addLamp(lamp, message);
+                //retrieve IP from message
+                if(message.contains(",")) {
+                    String[] str = message.split(",");
+                    Lamp lamp = new Lamp(str[0]);
+                    lamp.setName(str[1]);
+                    LampManager.getInstance().addLamp(lamp, lamp.getURL());
+                }
+                else {
+                    Lamp lamp = new Lamp(message);
+                    lamp.setName(message);
+                    LampManager.getInstance().addLamp(lamp, message);
+                }
                 publishProgress(100);
 
             } catch (SocketException e) {
                 // TODO Handle Exception
                 e.printStackTrace();
             } catch (SocketTimeoutException e) {
+                publishProgress(100);
                 continue;
             } catch (IOException e) {
                 // TODO Handle Exception

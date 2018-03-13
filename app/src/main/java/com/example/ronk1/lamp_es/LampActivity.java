@@ -67,32 +67,6 @@ public class LampActivity extends AppCompatActivity {
         LampManager lm = LampManager.getInstance();
         final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();
         Lamp activeLamp = new Lamp("NOT_DEFINED");
-        tcpClient = new TcpClient(new TcpClient.OnMessageReceived() {
-            @Override
-            //here the messageReceived method is implemented
-            public void messageReceived(final String message) {
-                //this method calls the onProgressUpdate
-                // Get a handler that can be used to post to the main thread
-                Handler mainHandler = new Handler(getApplicationContext().getMainLooper());
-                Runnable myRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-
-
-                        // DANILO LAVORA QUA
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
-
-
-                    } // This is your code
-                };
-                mainHandler.post(myRunnable);
-
-            }
-        });
-        connectTask = new ConnectTask();
-        connectTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tcpClient);
-
 
         int i = 0;
         for(; i< lamps.size(); i++) {
@@ -103,6 +77,33 @@ public class LampActivity extends AppCompatActivity {
         }
 
         if(!activeLamp.getURL().equals("NOT_DEFINED")) {
+
+            tcpClient = new TcpClient(new TcpClient.OnMessageReceived() {
+                @Override
+                //here the messageReceived method is implemented
+                public void messageReceived(final String message) {
+                    //this method calls the onProgressUpdate
+                    // Get a handler that can be used to post to the main thread
+                    Handler mainHandler = new Handler(getApplicationContext().getMainLooper());
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+
+
+                            // TODO Switch-method to set Lamp Attributes (board packets)
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            Log.e("message: ", message);
+
+
+
+                        } // This is your code
+                    };
+                    mainHandler.post(myRunnable);
+
+                }
+            }, activeLamp.getURL());
+            connectTask = new ConnectTask(getApplicationContext());
+            connectTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tcpClient);
 
             TextView tv = findViewById(R.id.lamp_name);
             tv.setText(activeLamp.getName());
@@ -174,13 +175,17 @@ public class LampActivity extends AppCompatActivity {
         }
 
         final Switch switch1 = findViewById(R.id.switch1);
+        if(activeLamp.isOn())
+            switch1.setChecked(true);
+        else
+            switch1.setChecked(false);
         final int position = i;
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(switch1.isChecked()) {
                     if (tcpClient != null) {
-                        tcpClient.sendMessage("testing");
+                        tcpClient.sendMessage("testing\n");
                     }
                     lamps.get(position).turnOn();
                 } else {

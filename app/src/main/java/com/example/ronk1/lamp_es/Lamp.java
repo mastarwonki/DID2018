@@ -15,6 +15,7 @@ public class Lamp {
     private Bitmap img;
     //private int img_res;
     private boolean state;
+    private long timestamp;
     String name;
 
     /*public Lamp (int brightness, int color, int img_res, boolean state, String name) {
@@ -94,6 +95,13 @@ public class Lamp {
         this.img = img;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 }
 
 

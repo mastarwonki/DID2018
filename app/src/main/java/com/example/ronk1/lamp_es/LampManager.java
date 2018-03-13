@@ -45,11 +45,12 @@ public class LampManager {
 
         for (Lamp l : lamps) {
             if (l.getURL().equalsIgnoreCase(url)) {
+                l.setTimestamp(System.currentTimeMillis());
                 return;
             }
         }
 
-//        lampMap.put(url, lamp);
+        lamp.setTimestamp(System.currentTimeMillis());
         lamps.add(lamp);
     }
 
@@ -57,8 +58,7 @@ public class LampManager {
         return lamps;
     }
 
-    public void discover(final Runnable done) {
-        LampAsyncTask lampAsyncTask = new LampAsyncTask(done);
+    public void discover(final LampAsyncTask lampAsyncTask) {
         lampAsyncTask.execute();
 //        Runnable runnable = new Runnable() {
 //            @Override
@@ -111,5 +111,11 @@ public class LampManager {
 //        };
 //        runnable.run();
 
+    }
+
+    public void stopDiscover(LampAsyncTask lampAsyncTask) {
+        lampAsyncTask.cancel(true);
+        if(lampAsyncTask != null)
+        lampAsyncTask = null;
     }
 }

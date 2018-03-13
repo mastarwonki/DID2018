@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -66,10 +67,13 @@ public class LampListAdapter extends BaseAdapter {
             switchStatus.setChecked(true);
         else
             switchStatus.setChecked(false);
-        switchStatus.setOnClickListener(new View.OnClickListener() {
+        switchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "Switch status", Toast.LENGTH_LONG).show();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(switchStatus.isChecked())
+                    lamp.turnOn();
+                else
+                    lamp.turnOff();
             }
         });
         view.setOnClickListener(new View.OnClickListener() {
