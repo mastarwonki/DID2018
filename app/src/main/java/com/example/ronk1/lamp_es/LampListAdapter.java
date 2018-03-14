@@ -70,10 +70,12 @@ public class LampListAdapter extends BaseAdapter {
         switchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(switchStatus.isChecked())
+                if(switchStatus.isChecked()) {
                     lamp.turnOn();
-                else
+                }
+                else {
                     lamp.turnOff();
+                }
             }
         });
         view.setOnClickListener(new View.OnClickListener() {

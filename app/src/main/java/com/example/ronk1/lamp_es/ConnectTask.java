@@ -38,6 +38,11 @@ public class ConnectTask extends AsyncTask<TcpClient, String, Long> {
         try{
             tcpClients[0].run();
         }catch (IOException ex){
+            ex.printStackTrace();
+            return new Long(-1);
+        }
+        catch (InterruptedException e){
+            e.printStackTrace();
             return new Long(-1);
         }
 

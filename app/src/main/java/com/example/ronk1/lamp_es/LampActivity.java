@@ -63,20 +63,34 @@ public class LampActivity extends AppCompatActivity {
         setContentView(R.layout.lamp_activity);
         Intent in = getIntent();
         String URL = in.getExtras().getString("URL");
+        String url2 = "NOT_DEFINED";
         Context ref = getApplicationContext();
         LampManager lm = LampManager.getInstance();
         final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();
-        Lamp activeLamp = new Lamp("NOT_DEFINED");
+        Lamp tmp = new Lamp(url2);
 
         int i = 0;
         for(; i< lamps.size(); i++) {
             if(lamps.get(i).getURL().equals(URL)) {
-                activeLamp = lamps.get(i);
+                tmp = lamps.get(i);
                 break;
             }
         }
 
+        final Lamp activeLamp = tmp;
+
         if(!activeLamp.getURL().equals("NOT_DEFINED")) {
+
+            final Button b1 = findViewById(R.id.button);
+            final Button b2 = findViewById(R.id.button2);
+            final Button b3 = findViewById(R.id.button3);
+            final Switch switch1 = findViewById(R.id.switch1);
+
+            if(activeLamp.isOn())
+                switch1.setChecked(true);
+            else
+                switch1.setChecked(false);
+            final int position = i;
 
             tcpClient = new TcpClient(new TcpClient.OnMessageReceived() {
                 @Override
@@ -94,6 +108,17 @@ public class LampActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             Log.e("message: ", message);
 
+                            if(message.equals("turnOn")) {
+                                activeLamp.turnOn();
+                                switch1.setChecked(true);
+
+                            }
+
+                            else if(message.equals("turnOff")) {
+                                activeLamp.turnOff();
+                                switch1.setChecked(false);
+                            }
+
 
 
                         } // This is your code
@@ -101,7 +126,7 @@ public class LampActivity extends AppCompatActivity {
                     mainHandler.post(myRunnable);
 
                 }
-            }, activeLamp.getURL());
+            }, activeLamp);
             connectTask = new ConnectTask(getApplicationContext());
             connectTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tcpClient);
 
@@ -132,11 +157,6 @@ public class LampActivity extends AppCompatActivity {
 
                 }
             });
-
-
-            final Button b1 = findViewById(R.id.button);
-            final Button b2 = findViewById(R.id.button2);
-            final Button b3 = findViewById(R.id.button3);
 
             b1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -171,27 +191,25 @@ public class LampActivity extends AppCompatActivity {
                 }
             });
 
+            switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(switch1.isChecked()) {
+                        if (tcpClient != null) {
+                            //tcpClient.sendMessage("testing\n");
+                            tcpClient.setMessage("turnOn");
+                        }
+                        lamps.get(position).turnOn();
+                    } else {
+                        if (tcpClient != null) {
+                            //tcpClient.sendMessage("testing\n");
+                            tcpClient.setMessage("turnOff");
+                        }
+                        lamps.get(position).turnOff();
+                    }
+                }
+            });
 
         }
-
-        final Switch switch1 = findViewById(R.id.switch1);
-        if(activeLamp.isOn())
-            switch1.setChecked(true);
-        else
-            switch1.setChecked(false);
-        final int position = i;
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(switch1.isChecked()) {
-                    if (tcpClient != null) {
-                        tcpClient.sendMessage("testing\n");
-                    }
-                    lamps.get(position).turnOn();
-                } else {
-                    lamps.get(position).turnOff();
-                }
-            }
-        });
     }
 }

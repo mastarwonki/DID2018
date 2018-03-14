@@ -57,6 +57,7 @@ public class ListActivity extends AppCompatActivity {
                     if((System.currentTimeMillis() - lamp.getTimestamp()) >= 20000) {
                         lamps.remove(lamp);
                         Toast.makeText(getApplicationContext(), "Lost connection with "+lamp.getName(),Toast.LENGTH_LONG).show();
+                        ((LampListAdapter)listView.getAdapter()).notifyDataSetChanged();
                     }
                 }
                 
