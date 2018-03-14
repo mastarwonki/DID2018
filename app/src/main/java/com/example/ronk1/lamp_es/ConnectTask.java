@@ -18,18 +18,18 @@ import java.io.IOException;
 public class ConnectTask extends AsyncTask<TcpClient, String, Long> {
 
     private  Context context;
+    private Activity activity;
 
-    public ConnectTask(Context context) {
+    public ConnectTask(Context context, Activity activity) {
         this.context = context;
+        this.activity = activity;
     }
 
     @Override
     protected void onPostExecute(Long aLong) {
         if(aLong == -1){
             Toast.makeText(context, "Connection refused", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, ListActivity.class);
-            context.startActivity(intent);
-
+            activity.finish();
         }
     }
 

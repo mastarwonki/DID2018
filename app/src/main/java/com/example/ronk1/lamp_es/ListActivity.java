@@ -88,9 +88,9 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        lampAsyncTask.stopRunning();
         super.onDestroy();
-        lm = LampManager.getInstance();
-        lm.stopDiscover(lampAsyncTask);
+
 
     }
 

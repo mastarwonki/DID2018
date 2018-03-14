@@ -1,6 +1,7 @@
 package com.example.ronk1.lamp_es;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -127,7 +128,7 @@ public class LampActivity extends AppCompatActivity {
 
                 }
             }, activeLamp);
-            connectTask = new ConnectTask(getApplicationContext());
+            connectTask = new ConnectTask(getApplicationContext(), this);
             connectTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tcpClient);
 
             TextView tv = findViewById(R.id.lamp_name);

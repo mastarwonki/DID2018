@@ -50,7 +50,7 @@ public class TcpClient {
      *
      * @param message text entered by client
      */
-    public String sendMessage(final String message) {
+    private String sendMessage(final String message) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -114,7 +114,7 @@ public class TcpClient {
             catch(SocketTimeoutException e) {
                 socket.close();
                 if(sent.equals(message))
-                    setMessage(DEFAULT);
+                    this.setMessage(DEFAULT);
             }
 
             if (mServerMessage != null && mMessageListener != null) {
@@ -125,7 +125,7 @@ public class TcpClient {
 
             socket.close();
             if(sent.equals(message))
-                setMessage(DEFAULT);
+                this.setMessage(DEFAULT);
 
             Log.e("TCP Client", "C: Disconnected");
 

@@ -17,6 +17,7 @@ import java.util.List;
 public class LampAsyncTask extends AsyncTask<String,Integer, Long> {
 
     private Runnable done;
+    private boolean keepRunning = true;
 
     public LampAsyncTask(Runnable done) {
         this.done = done;
@@ -47,29 +48,26 @@ public class LampAsyncTask extends AsyncTask<String,Integer, Long> {
 
         try {
             socket = new DatagramSocket(4096);
+            socket.setSoTimeout(5000);
         } catch (SocketException e) {
             e.printStackTrace();
         }
 
 
-        while (true) {
+        while (keepRunning) {
 
             try {
 
-                socket.setSoTimeout(5000);
                 socket.receive(packet);
                 message = new String(lmessage, 0, packet.getLength());
                 Log.e("UDP Receive", message);
-                // TODO ADD IMG TO LAMP
-                //lamp.setPicture(img);
                 //retrieve IP from message
-                if(message.contains(",")) {
+                if (message.contains(",")) {
                     String[] str = message.split(",");
                     Lamp lamp = new Lamp(str[0]);
                     lamp.setName(str[1]);
                     LampManager.getInstance().addLamp(lamp, lamp.getURL());
-                }
-                else {
+                } else {
                     Lamp lamp = new Lamp(message);
                     lamp.setName(message);
                     LampManager.getInstance().addLamp(lamp, message);
@@ -84,17 +82,24 @@ public class LampAsyncTask extends AsyncTask<String,Integer, Long> {
                 continue;
             } catch (IOException e) {
                 // TODO Handle Exception
-            }finally {
+            } finally {
 
-//                if (socket != null)
-//                    socket.close();
+//
 
                 // TODO Handle Closure
 
             }
 
         }
+        if (socket != null)
+            socket.close();
 
+        return Long.valueOf(1);
+    }
+
+    public void stopRunning() {
+
+        keepRunning = false;
 
     }
 }
