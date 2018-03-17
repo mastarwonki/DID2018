@@ -32,10 +32,23 @@ import java.util.ArrayList;
 
 public class LampActivity extends AppCompatActivity {
 
+    //variables
     private LampView lv;
-    private SeekBar sb;
+    private SeekBar sb, seekBar;
     private TcpClient tcpClient;
     private ConnectTask connectTask;
+
+    //default messages
+    private final String turnOn = "turnOn";
+    private final String turnOff = "turnOff";
+    private final String setIntensity = "setIntensity";
+    private final String setColor = "setColor";
+
+    //brightness seekbar controls
+    private int maxLum = 255;
+    private int lumStep = 5;
+    private int currentProgress;
+    private int seekMax = maxLum/lumStep;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB) // API 11
     void startMyTask(AsyncTask asyncTask) {
@@ -65,7 +78,7 @@ public class LampActivity extends AppCompatActivity {
         Intent in = getIntent();
         String URL = in.getExtras().getString("URL");
         String url2 = "NOT_DEFINED";
-        Context ref = getApplicationContext();
+        final Context ref = getApplicationContext();
         LampManager lm = LampManager.getInstance();
         final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();
         Lamp tmp = new Lamp(url2);
@@ -106,21 +119,30 @@ public class LampActivity extends AppCompatActivity {
 
 
                             // TODO Switch-method to set Lamp Attributes (board packets)
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             Log.e("message: ", message);
 
-                            if(message.equals("turnOn")) {
-                                activeLamp.turnOn();
-                                switch1.setChecked(true);
+                            String[] recv = message.split(",");
+                            switch (recv[0]) {
 
+                                case turnOn:
+                                    activeLamp.turnOn();
+                                    switch1.setChecked(true);
+                                    break;
+
+                                case turnOff:
+                                    activeLamp.turnOff();
+                                    switch1.setChecked(false);
+                                    break;
+
+                                case setIntensity:
+                                    if(recv.length > 1) {
+                                        Toast.makeText(ref, recv[1], Toast.LENGTH_SHORT).show();
+                                        activeLamp.setIntensity(Integer.parseInt(recv[1]));
+                                        seekBar.setProgress((activeLamp.getIntensity() * seekMax)/maxLum);
+                                    }
+                                    break;
                             }
-
-                            else if(message.equals("turnOff")) {
-                                activeLamp.turnOff();
-                                switch1.setChecked(false);
-                            }
-
-
 
                         } // This is your code
                     };
@@ -208,6 +230,30 @@ public class LampActivity extends AppCompatActivity {
                         }
                         lamps.get(position).turnOff();
                     }
+                }
+            });
+
+            seekBar = findViewById(R.id.seekBar);
+            seekBar.setMax(seekMax);
+            seekBar.setProgress(3);
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+
+                    currentProgress = progress*lumStep;
+                    activeLamp.setIntensity(currentProgress);
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    tcpClient.setMessage(setIntensity + "," + activeLamp.getIntensity());
+
                 }
             });
 

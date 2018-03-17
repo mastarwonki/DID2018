@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.graphics.Bitmap;
@@ -53,13 +54,17 @@ public class ListActivity extends AppCompatActivity {
 
                 // Remove expired lamps
                 List<Lamp> lamps = LampManager.getInstance().getLamps();
-                for (Lamp lamp : lamps) {
-                    if((System.currentTimeMillis() - lamp.getTimestamp()) >= 20000) {
-                        lamps.remove(lamp);
-                        Toast.makeText(getApplicationContext(), "Lost connection with "+lamp.getName(),Toast.LENGTH_LONG).show();
-                        ((LampListAdapter)listView.getAdapter()).notifyDataSetChanged();
+                Iterator<Lamp> iter = lamps.iterator();
+                //for (Lamp lamp : lamps) {
+                while(iter.hasNext()) {
+                    Lamp lamp = iter.next();
+                    if ((System.currentTimeMillis() - lamp.getTimestamp()) >= 20000) {
+                        iter.remove();
+                        Toast.makeText(getApplicationContext(), "Lost connection with " + lamp.getName(), Toast.LENGTH_LONG).show();
+                        ((LampListAdapter) listView.getAdapter()).notifyDataSetChanged();
                     }
                 }
+                //}
                 
                 if(lamps.isEmpty())
                     loader.setVisibility(View.VISIBLE);
@@ -90,7 +95,6 @@ public class ListActivity extends AppCompatActivity {
     protected void onDestroy() {
         lampAsyncTask.stopRunning();
         super.onDestroy();
-
 
     }
 

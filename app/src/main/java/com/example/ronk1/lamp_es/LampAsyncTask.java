@@ -84,15 +84,11 @@ public class LampAsyncTask extends AsyncTask<String,Integer, Long> {
                 // TODO Handle Exception
             } finally {
 
-//
-
-                // TODO Handle Closure
-
+                if (socket != null)
+                    socket.close();
             }
 
         }
-        if (socket != null)
-            socket.close();
 
         return Long.valueOf(1);
     }

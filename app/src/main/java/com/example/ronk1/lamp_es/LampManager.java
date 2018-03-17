@@ -1,24 +1,7 @@
 package com.example.ronk1.lamp_es;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.content.Context;
-
-import java.io.IOException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import android.os.SystemClock;
-import android.util.Log;
-
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.lang.Runnable;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Ronk1 on 30/11/17.
@@ -111,11 +94,5 @@ public class LampManager {
 //        };
 //        runnable.run();
 
-    }
-
-    public void stopDiscover(LampAsyncTask lampAsyncTask) {
-        lampAsyncTask.cancel(true);
-        if(lampAsyncTask != null)
-        lampAsyncTask = null;
     }
 }

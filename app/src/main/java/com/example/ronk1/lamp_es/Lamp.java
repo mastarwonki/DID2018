@@ -16,7 +16,7 @@ public class Lamp {
     //private int img_res;
     private boolean state;
     private long timestamp;
-    String name;
+    private String name;
 
     /*public Lamp (int brightness, int color, int img_res, boolean state, String name) {
 
