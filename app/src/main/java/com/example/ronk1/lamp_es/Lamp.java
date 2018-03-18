@@ -11,7 +11,7 @@ public class Lamp {
 
     private String URL;
     private int intensity;
-    private int rgb;
+    private int rgb = 0xFFFFFF;
     private Bitmap img;
     //private int img_res;
     private boolean state;

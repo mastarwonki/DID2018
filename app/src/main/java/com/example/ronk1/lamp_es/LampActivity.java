@@ -3,15 +3,21 @@ package com.example.ronk1.lamp_es;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -21,6 +27,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.ronk1.lamp_es.Lamp;
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorChangedListener;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -30,7 +41,7 @@ import java.util.ArrayList;
 
 
 
-public class LampActivity extends AppCompatActivity {
+public class LampActivity extends AppCompatActivity{
 
     //variables
     private LampView lv;
@@ -44,7 +55,7 @@ public class LampActivity extends AppCompatActivity {
     private final String setIntensity = "setIntensity";
     private final String setColor = "setColor";
 
-    //brightness seekbar controls
+    //seekbar and view controls
     private int maxLum = 255;
     private int lumStep = 5;
     private int currentProgress;
@@ -73,6 +84,7 @@ public class LampActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //setTheme(R.style.Theme_AppCompat);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lamp_activity);
         Intent in = getIntent();
@@ -119,7 +131,7 @@ public class LampActivity extends AppCompatActivity {
 
 
                             // TODO Switch-method to set Lamp Attributes (board packets)
-                            //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             Log.e("message: ", message);
 
                             String[] recv = message.split(",");
@@ -211,6 +223,41 @@ public class LampActivity extends AppCompatActivity {
                     b2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.neutral_light));
                     b3.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.relax_light_selected));
 
+                   /* ColorPickerDialogBuilder
+                            .with(ref)
+                            .setTitle("Choose Color")
+                            .initialColor(activeLamp.getColor())
+                            .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                            .density(8)
+                            .setOnColorChangedListener(new OnColorChangedListener() {
+                                @Override
+                                public void onColorChanged(int selectedColor) {
+                                    // Handle on color change
+                                    Log.d("ColorPicker", "onColorChanged: 0x" + Integer.toHexString(selectedColor));
+                                }
+                            })
+                            .setOnColorSelectedListener(new OnColorSelectedListener() {
+                                @Override
+                                public void onColorSelected(int selectedColor) {
+                                    Toast.makeText(getApplicationContext(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setPositiveButton("ok", new ColorPickerClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                                    activeLamp.setColor(Integer.parseInt("0x" + selectedColor));
+
+                                }
+                            })
+                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .showColorEdit(true)
+                            .setColorEditTextColor(ContextCompat.getColor(LampActivity.this, android.R.color.holo_blue_bright))
+                            .build()
+                            .show(); */
                 }
             });
 
@@ -219,13 +266,11 @@ public class LampActivity extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(switch1.isChecked()) {
                         if (tcpClient != null) {
-                            //tcpClient.sendMessage("testing\n");
                             tcpClient.setMessage("turnOn");
                         }
                         lamps.get(position).turnOn();
                     } else {
                         if (tcpClient != null) {
-                            //tcpClient.sendMessage("testing\n");
                             tcpClient.setMessage("turnOff");
                         }
                         lamps.get(position).turnOff();
@@ -258,5 +303,8 @@ public class LampActivity extends AppCompatActivity {
             });
 
         }
+
     }
+
+
 }

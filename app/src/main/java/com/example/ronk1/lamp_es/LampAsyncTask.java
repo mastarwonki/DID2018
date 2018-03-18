@@ -68,9 +68,10 @@ public class LampAsyncTask extends AsyncTask<String,Integer, Long> {
                     lamp.setName(str[1]);
                     LampManager.getInstance().addLamp(lamp, lamp.getURL());
                 } else {
-                    Lamp lamp = new Lamp(message);
+                    String hostIP = packet.getAddress().getHostAddress().trim();
+                    Lamp lamp = new Lamp(hostIP);
                     lamp.setName(message);
-                    LampManager.getInstance().addLamp(lamp, message);
+                    LampManager.getInstance().addLamp(lamp, lamp.getURL());
                 }
                 publishProgress(100);
 
@@ -83,12 +84,13 @@ public class LampAsyncTask extends AsyncTask<String,Integer, Long> {
             } catch (IOException e) {
                 // TODO Handle Exception
             } finally {
-
-                if (socket != null)
-                    socket.close();
+                //TODO Handle Closure
             }
 
         }
+
+        if (socket != null)
+            socket.close();
 
         return Long.valueOf(1);
     }
