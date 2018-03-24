@@ -1,7 +1,6 @@
 package com.example.ronk1.lamp_es;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +18,8 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class LampDetailsActivity extends AppCompatActivity {
 
     /**
@@ -35,6 +36,8 @@ public class LampDetailsActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private int pos = 0;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,18 @@ public class LampDetailsActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        Intent in = getIntent();
+        //pos = in.getExtras().getInt("POSITION");
+        url = in.getExtras().getString("URL");
+
+        LampManager lm = LampManager.getInstance();
+        final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();
+        for(int i = 0; i< lamps.size(); i++) {
+            if(lamps.get(i).getURL().equals(url)) {
+                pos = i;
+                break;
+            }
+        }
 
     }
 
@@ -102,14 +117,13 @@ public class LampDetailsActivity extends AppCompatActivity {
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putInt("LAMP_POS", sectionNumber);
             fragment.setArguments(args);
             return fragment;
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_lamp_details, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
@@ -129,20 +143,24 @@ public class LampDetailsActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", pos);
             switch (position)
             {
                 case 0:
-                    Tab1_Timer tab1 = new Tab1_Timer();
+                    Tab1_Lamp tab1 = new Tab1_Lamp();
+                    tab1.setArguments(bundle);
                     return tab1;
                 case 1:
-                    Tab2_Lamp tab2 = new Tab2_Lamp();
+                    Tab2_Color tab2 = new Tab2_Color();
+                    tab2.setArguments(bundle);
                     return tab2;
                 case 2:
                     Tab3_Rotation tab3= new Tab3_Rotation();
+                    tab3.setArguments(bundle);
                     return tab3;
                 case 3:
-                    Tab4_Color tab4 = new Tab4_Color();
-                    return tab4;
+
             }
             return null;
         }
@@ -150,7 +168,7 @@ public class LampDetailsActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 4;
+            return 3;
         }
 
         @Override
@@ -163,8 +181,6 @@ public class LampDetailsActivity extends AppCompatActivity {
                     return "SECTION 2";
                 case 2:
                     return "SECTION 3";
-                case 3:
-                    return "SECTION 4";
             }
             return null;
         }

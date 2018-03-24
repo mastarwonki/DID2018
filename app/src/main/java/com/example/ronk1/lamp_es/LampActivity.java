@@ -223,41 +223,9 @@ public class LampActivity extends AppCompatActivity{
                     b2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.neutral_light));
                     b3.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.relax_light_selected));
 
-                   /* ColorPickerDialogBuilder
-                            .with(ref)
-                            .setTitle("Choose Color")
-                            .initialColor(activeLamp.getColor())
-                            .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                            .density(8)
-                            .setOnColorChangedListener(new OnColorChangedListener() {
-                                @Override
-                                public void onColorChanged(int selectedColor) {
-                                    // Handle on color change
-                                    Log.d("ColorPicker", "onColorChanged: 0x" + Integer.toHexString(selectedColor));
-                                }
-                            })
-                            .setOnColorSelectedListener(new OnColorSelectedListener() {
-                                @Override
-                                public void onColorSelected(int selectedColor) {
-                                    Toast.makeText(getApplicationContext(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .setPositiveButton("ok", new ColorPickerClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                                    activeLamp.setColor(Integer.parseInt("0x" + selectedColor));
-
-                                }
-                            })
-                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .showColorEdit(true)
-                            .setColorEditTextColor(ContextCompat.getColor(LampActivity.this, android.R.color.holo_blue_bright))
-                            .build()
-                            .show(); */
+                    Intent in = new Intent(ref, LampDetailsActivity.class);
+                    in.putExtra("POSITION", position);
+                    ref.startActivity(in);
                 }
             });
 
@@ -280,7 +248,9 @@ public class LampActivity extends AppCompatActivity{
 
             seekBar = findViewById(R.id.seekBar);
             seekBar.setMax(seekMax);
-            seekBar.setProgress(3);
+            if(activeLamp.getIntensity() != 0)
+            seekBar.setProgress(activeLamp.getIntensity()/lumStep);
+            else seekBar.setProgress(0);
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {

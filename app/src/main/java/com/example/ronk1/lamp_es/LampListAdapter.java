@@ -82,7 +82,11 @@ public class LampListAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(context, LampActivity.class);
+                /*Intent in = new Intent(context, LampActivity.class);
+                in.putExtra("URL", lamp.getURL());
+                context.startActivity(in); */
+                Intent in = new Intent(context, LampDetailsActivity.class);
+                //in.putExtra("POSITION", position);
                 in.putExtra("URL", lamp.getURL());
                 context.startActivity(in);
             }

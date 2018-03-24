@@ -10,7 +10,7 @@ import android.media.Image;
 public class Lamp {
 
     private String URL;
-    private int intensity;
+    private int intensity = 15;
     private int rgb = 0xFFFFFF;
     private Bitmap img;
     //private int img_res;

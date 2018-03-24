@@ -2,12 +2,12 @@ package com.example.ronk1.lamp_es;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatDialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -15,39 +15,39 @@ import com.flask.colorpicker.OnColorChangedListener;
 import com.flask.colorpicker.OnColorSelectedListener;
 
 /**
- * Created by Ronk1 on 17/03/18.
+ * Created by irene on 30/12/2017.
  */
 
-public class AdaptedDialogFragment extends AppCompatDialogFragment {
+public class Tab2_Color extends Fragment {
 
-    String hexColor = "0xFFFFFF";
+    int pos;
+    LampManager lm;
 
-    public AdaptedDialogFragment() {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-
-    }
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        final View view = inflater.inflate(R.layout.fragment_adapted_dialog, container, false);
-
+        pos = this.getArguments().getInt("position");
+        View view = getLayoutInflater().inflate(R.layout.tab2_color, container, false);
+        TextView txt = view.findViewById(R.id.txt);
+        txt.setText(String.valueOf(pos));
         ColorPickerView colorPickerView = view.findViewById(R.id.color_picker_view);
         colorPickerView.addOnColorChangedListener(new OnColorChangedListener() {
             @Override public void onColorChanged(int selectedColor) {
                 // Handle on color change
-                //Log.d("ColorPicker", "onColorChanged: 0x" + Integer.toHexString(selectedColor));
-
+                Log.d("ColorPicker", "onColorChanged: 0x" + Integer.toHexString(selectedColor));
             }
         });
         colorPickerView.addOnColorSelectedListener(new OnColorSelectedListener() {
             @Override
             public void onColorSelected(int selectedColor) {
+                Toast.makeText(
+                        getContext(),
+                        "selectedColor: " + Integer.toHexString(selectedColor).toUpperCase(),
+                        Toast.LENGTH_SHORT).show();
 
             }
         });
-
-        Button confirm = view.findViewById(R.id.confirm);
-
 
         return view;
     }
