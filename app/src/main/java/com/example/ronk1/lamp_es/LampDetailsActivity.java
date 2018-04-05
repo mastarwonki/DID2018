@@ -159,8 +159,6 @@ public class LampDetailsActivity extends AppCompatActivity {
                     Tab3_Rotation tab3= new Tab3_Rotation();
                     tab3.setArguments(bundle);
                     return tab3;
-                case 3:
-
             }
             return null;
         }

@@ -103,11 +103,11 @@ public class TcpService extends Service {
                     }
 
                     catch(IOException e){
-                        //Toast.makeText(getApplicationContext(), "Connection Refused", Toast.LENGTH_SHORT).show();
+                        if(mMessageListener != null)
                         mMessageListener.messageReceived("Connection Refused");
                         e.printStackTrace();
                     } catch (InterruptedException e) {
-                        //Toast.makeText(getApplicationContext(), "Connection Stopped", Toast.LENGTH_SHORT).show();
+                        if(mMessageListener != null)
                         mMessageListener.messageReceived("Connection Stopped");
                         e.printStackTrace();
                     }
@@ -124,7 +124,7 @@ public class TcpService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        // TODO: Close socket
+        //Close socket
 
         mRun = false;
 
@@ -133,7 +133,7 @@ public class TcpService extends Service {
             mBufferOut.close();
         }
 
-        if (!socket.isClosed()) {
+        if (socket != null) {
             try {
                 socket.close();
             } catch (IOException e) {
@@ -141,7 +141,7 @@ public class TcpService extends Service {
             }
         }
 
-        //mMessageListener = null;
+        mMessageListener = null;
         mBufferIn = null;
         mBufferOut = null;
         mServerMessage = null;

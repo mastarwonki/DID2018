@@ -1,11 +1,9 @@
 package com.example.ronk1.lamp_es;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -24,10 +22,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorChangedListener;
-import com.flask.colorpicker.OnColorSelectedListener;
-
 import java.util.ArrayList;
 
 /**
@@ -39,7 +33,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
     //lamp infos
     private int pos;
     private String ip;
-    private Lamp activeLamp;
+    private Lamp activeLamp = null;
 
     //variables
     //GUI
@@ -47,7 +41,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
     private Button b1;
     private Button b2;
     private Button b3;
-    private LampView lv;
+    private LampView_inclination lv;
     private SeekBar sb, seekBar;
 
     //default messages
@@ -84,6 +78,18 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
         super.onStop();
         getActivity().unbindService(myConnection);
         mBound = false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(activeLamp != null) {
+        if (activeLamp.isOn())
+            switch1.setChecked(true);
+        else switch1.setChecked(false);
+
+        seekBar.setProgress(activeLamp.getIntensity()/lumStep);
+        }
     }
 
     @Nullable
@@ -123,7 +129,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
                         public void run() {
 
                             // TODO Switch-method to set Lamp Attributes (board packets)
-                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                             Log.e("message: ", message);
 
                             String[] recv = message.split(",");
@@ -148,11 +154,11 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
                                     break;
 
                                 case "Connection Refused":
-                                    getActivity().finish();
+                                    //getActivity().finish();
                                     break;
 
                                 case "Connection Stopped":
-                                    getActivity().finish();
+                                    //getActivity().finish();
                                     break;
 
                                 default:

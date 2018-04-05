@@ -1,23 +1,16 @@
 package com.example.ronk1.lamp_es;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -25,13 +18,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
-
-import com.example.ronk1.lamp_es.Lamp;
-import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorChangedListener;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -44,7 +30,7 @@ import java.util.ArrayList;
 public class LampActivity extends AppCompatActivity{
 
     //variables
-    private LampView lv;
+    private LampView_inclination lv;
     private SeekBar sb, seekBar;
     private TcpClient tcpClient;
     private ConnectTask connectTask;

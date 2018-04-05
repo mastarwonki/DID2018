@@ -1,5 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.flask.colorpicker.ColorPickerView
+        android:id="@+id/color_picker_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:density="12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:wheelType="CIRCLE" />
+
+    <TextView
+        android:id="@+id/txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/color_picker_view" />
+
+    <Button
+        android:id="@+id/colorSetter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Set Lamp Color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt"
+        app:layout_constraintVertical_bias="0.0" />
+
+</android.support.constraint.ConstraintLayout>
+
+<!--<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,24 +60,8 @@
         android:id="@+id/color_picker_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:alphaSlider="true"
         app:density="12"
-        app:lightnessSlider="true"
         app:wheelType="FLOWER"
-        app:lightnessSliderView="@+id/v_lightness_slider"
-        app:alphaSliderView="@+id/v_alpha_slider"
-        />
-
-    <com.flask.colorpicker.slider.LightnessSlider
-        android:id="@+id/v_lightness_slider"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        />
-
-    <com.flask.colorpicker.slider.AlphaSlider
-        android:id="@+id/v_alpha_slider"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
         />
 
     <TextView
@@ -36,4 +70,13 @@
         android:text="TextView"
         android:id="@+id/txt"/>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/colorSetter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Set Lamp Color"/>
+
+</LinearLayout> -->

@@ -11,12 +11,14 @@ public class Lamp {
 
     private String URL;
     private int intensity = 15;
-    private int rgb = 0xFFFFFF;
+    private int hex = 0xFFFFFF00;
     private Bitmap img;
     //private int img_res;
     private boolean state;
     private long timestamp;
     private String name;
+    private int inclination = 0;
+    private int rotation = 0;
 
     /*public Lamp (int brightness, int color, int img_res, boolean state, String name) {
 
@@ -49,14 +51,14 @@ public class Lamp {
 
     }
 
-    public void setColor(int rgb) {
+    public void setColor(int hex) {
 
-        this.rgb = rgb;
+        this.hex = hex;
 
     }
 
     public int getColor() {
-        return rgb;
+        return hex;
     }
 
 
@@ -102,6 +104,23 @@ public class Lamp {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
-}
 
+
+    public int getInclination() {
+        return inclination;
+    }
+
+    public void setInclination(int inclination) {
+        this.inclination = inclination;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
+    }
+
+}
 
