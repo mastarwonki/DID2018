@@ -42,13 +42,15 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
     private Button b2;
     private Button b3;
     private LampView_inclination lv;
-    private SeekBar sb, seekBar;
+    private SeekBar sb, seekBar, inclAngle;
 
     //default messages
     private final String turnOn = "turnOn";
     private final String turnOff = "turnOff";
     private final String setIntensity = "setIntensity";
     private final String setColor = "setColor";
+    private final String setIncl = "setInclination";
+    private final String setRot = "setRotation";
 
     //seekbar and view controls
     private int maxLum = 255;
@@ -92,6 +94,21 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
         }
     }
 
+   /* @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+            savedInstanceState.putBoolean("Sent", sent);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+        if(savedInstanceState != null)
+        sent = savedInstanceState.getBoolean("Sent");
+    }
+*/
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -101,6 +118,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
         Intent intent = new Intent(context, TcpService.class);
         intent.putExtra("IP", ip);
         View view = getLayoutInflater().inflate(R.layout.tab1_lamp, container, false);
+        View view1 = getLayoutInflater().inflate(R.layout.tab3_rotation, container, false);
 
         LampManager lm = LampManager.getInstance();
         final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();
@@ -110,15 +128,19 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
         b2 = view.findViewById(R.id.button2);
         b3 = view.findViewById(R.id.button3);
         switch1 = view.findViewById(R.id.switch1);
+        seekBar = view.findViewById(R.id.seekBar);
+        inclAngle = view1.findViewById(R.id.seekBar2);
 
         if(activeLamp.isOn())
             switch1.setChecked(true);
         else
             switch1.setChecked(false);
 
+        seekBar.setProgress(activeLamp.getIntensity());
+
         //if(mBound) {
 
-            messageReceived = new TcpService.OnMessageReceived() {
+           messageReceived = new TcpService.OnMessageReceived() {
                 @Override
                 public void messageReceived(final String message) {
                     //this method calls the onProgressUpdate
@@ -129,7 +151,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
                         public void run() {
 
                             // TODO Switch-method to set Lamp Attributes (board packets)
-                            //Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                             Log.e("message: ", message);
 
                             String[] recv = message.split(",");
@@ -138,6 +160,9 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
                                 case turnOn:
                                     activeLamp.turnOn();
                                     switch1.setChecked(true);
+                                    if (recv.length > 1)
+                                        activeLamp.setInclination(Integer.parseInt(recv[1]));
+                                        inclAngle.setProgress(activeLamp.getInclination());
                                     break;
 
                                 case turnOff:
@@ -147,7 +172,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
 
                                 case setIntensity:
                                     if (recv.length > 1) {
-                                        Toast.makeText(context, recv[1], Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(context, recv[1], Toast.LENGTH_SHORT).show();
                                         activeLamp.setIntensity(Integer.parseInt(recv[1]));
                                         seekBar.setProgress((activeLamp.getIntensity() * seekMax) / maxLum);
                                     }
@@ -183,7 +208,6 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
 
             switch1.setOnCheckedChangeListener(this);
 
-            seekBar = view.findViewById(R.id.seekBar);
             seekBar.setMax(seekMax);
             if (activeLamp.getIntensity() != 0)
                 seekBar.setProgress(activeLamp.getIntensity() / lumStep);
@@ -200,6 +224,17 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
             TcpService.MyLocalBinder binder = (TcpService.MyLocalBinder) service;
             myService = binder.getService();
             myService.setMessageListener(messageReceived);
+            if(activeLamp != null) {
+                if(activeLamp.isOn())
+                    myService.setMessage(turnOn);
+                else myService.setMessage(turnOff);
+
+                myService.setMessage(setIntensity + "," + activeLamp.getIntensity());
+                myService.setMessage(setColor + "," + activeLamp.getColor());
+                myService.setMessage(setIncl + "," + activeLamp.getInclination());
+                myService.setMessage(setRot + "," + activeLamp.getRotation());
+
+            }
             mBound = true;
         }
         public void onServiceDisconnected(ComponentName arg0) {
@@ -261,11 +296,13 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
         if (switch1.isChecked()) {
-            myService.setMessage("turnOn");
             activeLamp.turnOn();
+            if(myService != null)
+            myService.setMessage(turnOn);
         } else {
-            myService.setMessage("turnOff");
             activeLamp.turnOff();
+            if(myService != null)
+            myService.setMessage(turnOff);
         }
 
     }

@@ -34,7 +34,7 @@ public class Tab2_Color extends Fragment implements View.OnClickListener{
     LampManager lm;
     Lamp activeLamp;
     String ip;
-    long color;
+    int color;
     String hexcolor;
     ColorPickerView colorPickerView;
     //default messages
@@ -84,7 +84,7 @@ public class Tab2_Color extends Fragment implements View.OnClickListener{
         lm = LampManager.getInstance();
         activeLamp = lm.getLamps().get(pos);
 
-        messageReceived = new TcpService.OnMessageReceived() {
+        /* messageReceived = new TcpService.OnMessageReceived() {
             @Override
             public void messageReceived(final String message) {
                 //this method calls the onProgressUpdate
@@ -133,7 +133,7 @@ public class Tab2_Color extends Fragment implements View.OnClickListener{
                 mainHandler.post(myRunnable);
 
             }
-        };
+        }; */
 
         colorPickerView = view.findViewById(R.id.color_picker_view);
         colorPickerView.setInitialColor(activeLamp.getColor(), true);
@@ -143,18 +143,20 @@ public class Tab2_Color extends Fragment implements View.OnClickListener{
                 Log.d("ColorPicker", "onColorChanged: 0x" + Integer.toHexString(selectedColor));
             }
         });
-        colorPickerView.addOnColorSelectedListener(new OnColorSelectedListener() {
+
+        colorPickerView.addOnColorSelectedListener((new OnColorSelectedListener() {
             @Override
             public void onColorSelected(int selectedColor) {
                 Toast.makeText(
                         getContext(),
                         "selectedColor: " + Integer.toHexString(selectedColor).toUpperCase(),
                         Toast.LENGTH_SHORT).show();
-                        hexcolor = Integer.toHexString(selectedColor).toUpperCase();
-                        color = Long.decode("0x" + hexcolor);
+                        //hexcolor = Integer.toHexString(selectedColor).toUpperCase();
+                        //color = Long.decode("0x" + hexcolor);
+                        color = selectedColor;
 
             }
-        });
+        }));
 
         Button colorSetter = view.findViewById(R.id.colorSetter);
         colorSetter.setOnClickListener(this);
@@ -166,7 +168,7 @@ public class Tab2_Color extends Fragment implements View.OnClickListener{
         public void onServiceConnected(ComponentName className, IBinder service) {
             TcpService.MyLocalBinder binder = (TcpService.MyLocalBinder) service;
             myService = binder.getService();
-            myService.setMessageListener(messageReceived);
+            //myService.setMessageListener(messageReceived);
             mBound = true;
         }
         public void onServiceDisconnected(ComponentName arg0) {
@@ -181,8 +183,8 @@ public class Tab2_Color extends Fragment implements View.OnClickListener{
         switch (view.getId()) {
 
             case R.id.colorSetter:
-                activeLamp.setColor((int)color);
-                myService.setMessage(setColor + "," + (int)color);
+                activeLamp.setColor(color);
+                myService.setMessage(setColor + "," + color);
         }
 
     }

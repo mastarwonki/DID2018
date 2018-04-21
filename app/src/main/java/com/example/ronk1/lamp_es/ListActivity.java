@@ -1,5 +1,6 @@
 package com.example.ronk1.lamp_es;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,9 @@ import android.os.Parcelable;
 import android.widget.Toast;
 
 import com.example.ronk1.lamp_es.Lamp;
+
+import static com.example.ronk1.lamp_es.LampDetailsActivity.manager;
+import static com.example.ronk1.lamp_es.LampDetailsActivity.manager_running;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -62,6 +66,10 @@ public class ListActivity extends AppCompatActivity {
                         iter.remove();
                         Toast.makeText(getApplicationContext(), "Lost connection with " + lamp.getName(), Toast.LENGTH_LONG).show();
                         ((LampListAdapter) listView.getAdapter()).notifyDataSetChanged();
+                        //If I'm in lampInfos, stop the activity
+                        if(manager_running)
+                            manager.finish();
+
                     }
                 }
                 //}

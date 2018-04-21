@@ -1,6 +1,13 @@
 package com.example.ronk1.lamp_es;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.IBinder;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,13 +17,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -38,11 +49,44 @@ public class LampDetailsActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private int pos = 0;
     private String url;
+    private Lamp activeLamp = null;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
+    public static Activity manager;
+    public static boolean manager_running = false;
+
+    //Bundle vars
+    private boolean isOn = false;
+    private int brightness = 15;
+    private int color = 0xFF4286f4;
+    private int incl = 82;
+    private int rot = 82;
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        manager_running = false;
+
+         editor = sharedPreferences.edit();
+       if(activeLamp != null) {
+           editor.putBoolean("inOn", activeLamp.isOn());
+           editor.putInt("Brightness", activeLamp.getIntensity());
+           editor.putInt("Color", activeLamp.getColor());
+           editor.putInt("Inclination", activeLamp.getInclination());
+           editor.putInt("Rotation", activeLamp.getRotation());
+           editor.commit();
+       }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lamp_details);
+
+        manager = this;
+        manager_running = true;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,22 +103,66 @@ public class LampDetailsActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        final Context context = getApplicationContext();
         Intent in = getIntent();
         //pos = in.getExtras().getInt("POSITION");
         url = in.getExtras().getString("URL");
 
+        sharedPreferences = getSharedPreferences("LampStatus", 0);
+
+        if(sharedPreferences != null) {
+            isOn = sharedPreferences.getBoolean("isOn", false);
+            brightness = sharedPreferences.getInt("Brightness", 0);
+            color = sharedPreferences.getInt("Color", 0x4286f4);
+            incl = sharedPreferences.getInt("Inclination", 0);
+            rot = sharedPreferences.getInt("Rotation", 0);
+        }
         LampManager lm = LampManager.getInstance();
         final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();
         for(int i = 0; i< lamps.size(); i++) {
             if(lamps.get(i).getURL().equals(url)) {
                 pos = i;
+                activeLamp = lamps.get(pos);
+                if(isOn)
+                    activeLamp.turnOn();
+                else activeLamp.turnOff();
+                activeLamp.setIntensity(brightness);
+                activeLamp.setColor(color);
+                activeLamp.setInclination(incl);
+                activeLamp.setRotation(rot);
                 break;
             }
         }
 
     }
 
+   /* @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        if(activeLamp != null) {
+            savedInstanceState.putBoolean("isOn", activeLamp.isOn());
+            savedInstanceState.putInt("Brightness", activeLamp.getIntensity());
+            savedInstanceState.putInt("Color", activeLamp.getColor());
+            savedInstanceState.putInt("Inclination", activeLamp.getInclination());
+            savedInstanceState.putInt("Rotation", activeLamp.getRotation());
+        }
+    }
 
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+        isOn = savedInstanceState.getBoolean("isOn");
+        brightness = savedInstanceState.getInt("Brightness");
+        color = savedInstanceState.getInt("Color");
+        incl = savedInstanceState.getInt("Inclination");
+        rot = savedInstanceState.getInt("Rotation");
+    }
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -182,5 +270,6 @@ public class LampDetailsActivity extends AppCompatActivity {
             }
             return null;
         }
+
     }
 }

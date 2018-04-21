@@ -39,8 +39,8 @@ public class Tab3_Rotation extends Fragment implements SeekBar.OnSeekBarChangeLi
     private final String turnOn = "turnOn";
     private final String turnOff = "turnOff";
     private final String setIntensity = "setIntensity";
-    private final String setIncl = "setIncl";
-    private final String setRot = "setRot";
+    private final String setIncl = "setInclination";
+    private final String setRot = "setRotation";
     //service
     private TcpService myService;
     private boolean mBound = false;
@@ -79,7 +79,7 @@ public class Tab3_Rotation extends Fragment implements SeekBar.OnSeekBarChangeLi
         lm = LampManager.getInstance();
         activeLamp = lm.getLamps().get(pos);
 
-        messageReceived = new TcpService.OnMessageReceived() {
+        /*messageReceived = new TcpService.OnMessageReceived() {
             @Override
             public void messageReceived(final String message) {
                 //this method calls the onProgressUpdate
@@ -98,6 +98,9 @@ public class Tab3_Rotation extends Fragment implements SeekBar.OnSeekBarChangeLi
 
                             case turnOn:
                                 activeLamp.turnOn();
+                                if (recv.length > 1)
+                                    activeLamp.setInclination(Integer.parseInt(recv[1]));
+                                    inclAngle.setProgress(activeLamp.getInclination());
                                 break;
 
                             case turnOff:
@@ -128,19 +131,19 @@ public class Tab3_Rotation extends Fragment implements SeekBar.OnSeekBarChangeLi
                 mainHandler.post(myRunnable);
 
             }
-        };
+        }; */
 
         inclination_view=view.findViewById(R.id.lv);
         inclination_view.setAngle((float)activeLamp.getInclination());
         inclAngle=view.findViewById(R.id.seekBar2);
-        inclAngle.setMax(180);
+        inclAngle.setMax(164);
         inclAngle.setProgress(activeLamp.getInclination());
         inclAngle.setOnSeekBarChangeListener(this);
 
         rot_view=view.findViewById(R.id.lv2);
         rot_view.setAngle((float)activeLamp.getRotation());
         rotAngle=view.findViewById(R.id.seekBar3);
-        rotAngle.setMax(180);
+        rotAngle.setMax(164);
         rotAngle.setProgress(activeLamp.getRotation());
         rotAngle.setOnSeekBarChangeListener(this);
 
@@ -151,7 +154,7 @@ public class Tab3_Rotation extends Fragment implements SeekBar.OnSeekBarChangeLi
         public void onServiceConnected(ComponentName className, IBinder service) {
             TcpService.MyLocalBinder binder = (TcpService.MyLocalBinder) service;
             myService = binder.getService();
-            myService.setMessageListener(messageReceived);
+            //myService.setMessageListener(messageReceived);
             mBound = true;
         }
         public void onServiceDisconnected(ComponentName arg0) {
@@ -186,10 +189,12 @@ public class Tab3_Rotation extends Fragment implements SeekBar.OnSeekBarChangeLi
         switch (seekBar.getId()){
 
             case R.id.seekBar2:
+                activeLamp.setInclination(angle);
                myService.setMessage(setIncl + "," + angle);
                 break;
 
             case R.id.seekBar3:
+                activeLamp.setRotation(angle);
                 myService.setMessage(setRot + "," + angle);
                 break;
         }

@@ -11,7 +11,7 @@ public class Lamp {
 
     private String URL;
     private int intensity = 15;
-    private int hex = 0xFFFFFF00;
+    private int hex = 0xFF4286f4;
     private Bitmap img;
     //private int img_res;
     private boolean state;
