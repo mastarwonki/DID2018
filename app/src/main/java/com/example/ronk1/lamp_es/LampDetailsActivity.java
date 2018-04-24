@@ -71,7 +71,7 @@ public class LampDetailsActivity extends AppCompatActivity {
 
          editor = sharedPreferences.edit();
        if(activeLamp != null) {
-           editor.putBoolean("inOn", activeLamp.isOn());
+           editor.putBoolean("isOn", activeLamp.isOn());
            editor.putInt("Brightness", activeLamp.getIntensity());
            editor.putInt("Color", activeLamp.getColor());
            editor.putInt("Inclination", activeLamp.getInclination());

@@ -54,7 +54,6 @@ public class TcpService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Create socket - L'intent deve contenere l'IP del server
         mRun = true;
         server_ip = intent.getStringExtra("IP");
 
@@ -70,48 +69,46 @@ public class TcpService extends Service {
                 //in this while the client listens for the messages sent by the server
                 while (mRun) {
 
-                    Log.e("TCP Client", "C: Connected");
+                        Log.e("TCP Client", "C: Connected");
 
-                    //create a socket to make the connection with the server
-                    try {
-                        socket = new Socket(serverAddr, SERVER_PORT);
-                        socket.setSoTimeout(5000);
+                        //create a socket to make the connection with the server
+                        try {
+                            socket = new Socket(serverAddr, SERVER_PORT);
+                            socket.setSoTimeout(5000);
 
-                        //sends the message to the server
-                        mBufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                            //sends the message to the server
+                            mBufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 
-                        //receives the message which the server sends back
-                        mBufferIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                            //receives the message which the server sends back
+                            mBufferIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                        String sent = sendMessage(message);
+                            String sent = sendMessage(message);
 
-                        mServerMessage = mBufferIn.readLine();
+                            mServerMessage = mBufferIn.readLine();
 
-                        if (mServerMessage != null && mMessageListener != null) {
-                            //call the method messageReceived from MyActivity class
-                            mMessageListener.messageReceived(mServerMessage);
-                            Log.e("RESPONSE FROM SERVER", "S: Received Message: '" + mServerMessage + "'");
+                            if (mServerMessage != null && mMessageListener != null) {
+                                //call the method messageReceived from MyActivity class
+                                mMessageListener.messageReceived(mServerMessage);
+                                Log.e("RESPONSE FROM SERVER", "S: Received Message: '" + mServerMessage + "'");
+                            }
+
+                            socket.close();
+                            if (sent.equals(message))
+                                setMessage(DEFAULT);
+
+                            Log.e("TCP Client", "C: Disconnected");
+
+                            sleep(1000);
+                        } catch (IOException e) {
+                            if (mMessageListener != null)
+                                mMessageListener.messageReceived("Connection Refused");
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            if (mMessageListener != null)
+                                mMessageListener.messageReceived("Connection Stopped");
+                            e.printStackTrace();
                         }
-
-                        socket.close();
-                        if (sent.equals(message))
-                            setMessage(DEFAULT);
-
-                        Log.e("TCP Client", "C: Disconnected");
-
-                        sleep(1000);
                     }
-
-                    catch(IOException e){
-                        if(mMessageListener != null)
-                        mMessageListener.messageReceived("Connection Refused");
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        if(mMessageListener != null)
-                        mMessageListener.messageReceived("Connection Stopped");
-                        e.printStackTrace();
-                    }
-                }
 
             }
         });

@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by irene on 30/12/2017.
  */
@@ -86,10 +88,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
     public void onResume() {
         super.onResume();
         if(activeLamp != null) {
-        if (activeLamp.isOn())
-            switch1.setChecked(true);
-        else switch1.setChecked(false);
-
+        switch1.setChecked(activeLamp.isOn());
         seekBar.setProgress(activeLamp.getIntensity()/lumStep);
         }
     }
@@ -131,10 +130,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
         seekBar = view.findViewById(R.id.seekBar);
         inclAngle = view1.findViewById(R.id.seekBar2);
 
-        if(activeLamp.isOn())
-            switch1.setChecked(true);
-        else
-            switch1.setChecked(false);
+        switch1.setChecked(activeLamp.isOn());
 
         seekBar.setProgress(activeLamp.getIntensity());
 
@@ -225,15 +221,38 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
             myService = binder.getService();
             myService.setMessageListener(messageReceived);
             if(activeLamp != null) {
-                if(activeLamp.isOn())
-                    myService.setMessage(turnOn);
-                else myService.setMessage(turnOff);
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                        myService.setMessage(setIntensity + "," + activeLamp.getIntensity());
+                        sleep(1000);
+                        myService.setMessage(setColor + "," + activeLamp.getColor());
+                        sleep(1000);
+                        myService.setMessage(setIncl + "," + activeLamp.getInclination());
+                        sleep(1000);
+                        myService.setMessage(setRot + "," + activeLamp.getRotation());
+                        sleep(1000);
 
-                myService.setMessage(setIntensity + "," + activeLamp.getIntensity());
-                myService.setMessage(setColor + "," + activeLamp.getColor());
-                myService.setMessage(setIncl + "," + activeLamp.getInclination());
-                myService.setMessage(setRot + "," + activeLamp.getRotation());
+                        if(activeLamp.isOn())
+                            myService.setMessage(turnOn);
+                        else myService.setMessage(turnOff);
+                    }
 
+                    catch(InterruptedException e){
+                            Runnable r = new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity().getApplicationContext(), "Unable to init parameters", Toast.LENGTH_SHORT).show();
+                                }
+                            };
+
+                            getActivity().runOnUiThread(r);
+                        }
+                    }
+                });
+
+                t.start();
             }
             mBound = true;
         }
