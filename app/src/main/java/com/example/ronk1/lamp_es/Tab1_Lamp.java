@@ -11,11 +11,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -30,7 +35,7 @@ import static java.lang.Thread.sleep;
  * Created by irene on 30/12/2017.
  */
 
-public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, Switch.OnCheckedChangeListener{
+public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, Switch.OnCheckedChangeListener, EditText.OnFocusChangeListener, EditText.OnEditorActionListener{
 
     //lamp infos
     private int pos;
@@ -45,6 +50,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
     private Button b3;
     private LampView_inclination lv;
     private SeekBar sb, seekBar, inclAngle;
+    private EditText timer;
 
     //default messages
     private final String turnOn = "turnOn";
@@ -53,6 +59,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
     private final String setColor = "setColor";
     private final String setIncl = "setInclination";
     private final String setRot = "setRotation";
+    private final String setTimer = "setTimer";
 
     //seekbar and view controls
     private int maxLum = 255;
@@ -135,6 +142,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
         switch1 = view.findViewById(R.id.switch1);
         seekBar = view.findViewById(R.id.seekBar);
         inclAngle = view1.findViewById(R.id.seekBar2);
+        timer = view.findViewById(R.id.timer);
 
         switch1.setChecked(activeLamp.isOn());
 
@@ -176,14 +184,17 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
                                 case turnOn:
                                     activeLamp.turnOn();
                                     switch1.setChecked(true);
-                                    if (recv.length > 1)
+                                    if (recv.length > 1) {
                                         activeLamp.setInclination(Integer.parseInt(recv[1]));
                                         inclAngle.setProgress(activeLamp.getInclination());
+                                    }
                                     break;
 
                                 case turnOff:
                                     activeLamp.turnOff();
                                     switch1.setChecked(false);
+                                    if (recv.length > 1)
+                                        inclAngle.setProgress(Integer.parseInt(recv[1]));
                                     break;
 
                                 case setIntensity:
@@ -229,6 +240,11 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
                 seekBar.setProgress(activeLamp.getIntensity() / lumStep);
             else seekBar.setProgress(0);
             seekBar.setOnSeekBarChangeListener(this);
+
+            timer.setOnFocusChangeListener(this);
+            timer.setOnEditorActionListener(this);
+
+
        // }
 
 
@@ -351,7 +367,30 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
             activeLamp.turnOff();
             if(myService != null)
             myService.setMessage(turnOff);
+            timer.setText("");
         }
 
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+
+        if(!timer.hasFocus()){
+            InputMethodManager imm =  (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+        }
+
+    }
+
+    @Override
+    public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            //Clear focus here from edittext
+            if(!timer.getText().equals("") && myService!= null)
+                myService.setMessage(setTimer + "," + timer.getText().toString());
+            timer.clearFocus();
+        }
+        return false;
     }
 }
