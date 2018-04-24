@@ -59,7 +59,6 @@ public class LampListAdapter extends BaseAdapter {
         TextView tv = view.findViewById(R.id.lamp_name);
         tv.setText(lamp.getName());
         // Populate ImageView with Lamp Icon
-        //TODO Picasso HTTP
         //Bitmap img = BitmapFactory.decodeResource(context.getResources(), R.drawable.lamp1);
         ImageView iv = view.findViewById(R.id.lamp_img);
         Picasso.get()
