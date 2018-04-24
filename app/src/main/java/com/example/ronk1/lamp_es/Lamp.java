@@ -1,6 +1,7 @@
 package com.example.ronk1.lamp_es;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 
 /**
@@ -12,7 +13,7 @@ public class Lamp {
     private String URL;
     private int intensity = 15;
     private int hex = 0xFF4286f4;
-    private Bitmap img;
+    private Drawable img;
     //private int img_res;
     private boolean state;
     private long timestamp;
@@ -88,11 +89,11 @@ public class Lamp {
 
     }
 
-    public Bitmap getPicture() {
+    public Drawable getPicture() {
         return img;
     }
 
-    public void setPicture(Bitmap img) {
+    public void setPicture(Drawable img) {
 
         this.img = img;
     }

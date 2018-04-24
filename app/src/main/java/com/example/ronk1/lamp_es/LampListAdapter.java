@@ -15,6 +15,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -58,10 +60,16 @@ public class LampListAdapter extends BaseAdapter {
         tv.setText(lamp.getName());
         // Populate ImageView with Lamp Icon
         //TODO Picasso HTTP
-        Bitmap img = BitmapFactory.decodeResource(context.getResources(), R.drawable.lamp1);
-        lamp.setPicture(img);
+        //Bitmap img = BitmapFactory.decodeResource(context.getResources(), R.drawable.lamp1);
         ImageView iv = view.findViewById(R.id.lamp_img);
-        iv.setImageBitmap(lamp.getPicture());
+        Picasso.get()
+                .load("http://i.imgur.com/DvpvklR.png")
+                .placeholder(R.drawable.lamp1)
+                .resize(200, 200)
+                .centerCrop()
+                .into(iv);
+        lamp.setPicture(iv.getDrawable());
+        //iv.setImageBitmap(lamp.getPicture());
         // Populate Switch On-Off depending on lamp state
         final Switch switchStatus = view.findViewById(R.id.lamp_switch);
         if(lamp.isOn())

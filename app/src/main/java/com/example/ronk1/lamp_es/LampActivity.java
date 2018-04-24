@@ -154,7 +154,7 @@ public class LampActivity extends AppCompatActivity{
             TextView tv = findViewById(R.id.lamp_name);
             tv.setText(activeLamp.getName());
             ImageView iv = findViewById(R.id.lampada);
-            iv.setImageBitmap(activeLamp.getPicture());
+            iv.setImageDrawable(activeLamp.getPicture());
 
             //LAMP_ROT
             lv=findViewById(R.id.lv);

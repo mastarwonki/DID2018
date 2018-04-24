@@ -216,7 +216,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
             TextView tv = view.findViewById(R.id.lamp_name);
             tv.setText(activeLamp.getName());
             ImageView iv = view.findViewById(R.id.lampada);
-            iv.setImageBitmap(activeLamp.getPicture());
+            iv.setImageDrawable(activeLamp.getPicture());
 
             b1.setOnClickListener(this);
             b2.setOnClickListener(this);
