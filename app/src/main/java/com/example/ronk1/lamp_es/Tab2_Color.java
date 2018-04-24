@@ -23,6 +23,11 @@ import com.flask.colorpicker.OnColorSelectedListener;
 
 import java.util.ArrayList;
 
+import static com.example.ronk1.lamp_es.Tab1_Lamp.FOCUS;
+import static com.example.ronk1.lamp_es.Tab1_Lamp.NEUTRAL;
+import static com.example.ronk1.lamp_es.Tab1_Lamp.RELAX;
+import static com.example.ronk1.lamp_es.Tab1_Lamp.preset;
+
 /**
  * Created by irene on 30/12/2017.
  */
@@ -69,6 +74,7 @@ public class Tab2_Color extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        if(!preset)
         colorPickerView.setInitialColor(activeLamp.getColor(), true);
     }
 
@@ -136,6 +142,7 @@ public class Tab2_Color extends Fragment implements View.OnClickListener{
         }; */
 
         colorPickerView = view.findViewById(R.id.color_picker_view);
+        if(!preset)
         colorPickerView.setInitialColor(activeLamp.getColor(), true);
         colorPickerView.addOnColorChangedListener(new OnColorChangedListener() {
             @Override public void onColorChanged(int selectedColor) {

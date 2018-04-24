@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.ronk1.lamp_es.Tab1_Lamp.preset;
+
 public class LampDetailsActivity extends AppCompatActivity {
 
     /**
@@ -76,6 +78,7 @@ public class LampDetailsActivity extends AppCompatActivity {
            editor.putInt("Color", activeLamp.getColor());
            editor.putInt("Inclination", activeLamp.getInclination());
            editor.putInt("Rotation", activeLamp.getRotation());
+           //editor.putBoolean("Preset", preset);
            editor.commit();
        }
     }
@@ -116,6 +119,7 @@ public class LampDetailsActivity extends AppCompatActivity {
             color = sharedPreferences.getInt("Color", 0x4286f4);
             incl = sharedPreferences.getInt("Inclination", 0);
             rot = sharedPreferences.getInt("Rotation", 0);
+            //preset = sharedPreferences.getBoolean("Preset", true);
         }
         LampManager lm = LampManager.getInstance();
         final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();

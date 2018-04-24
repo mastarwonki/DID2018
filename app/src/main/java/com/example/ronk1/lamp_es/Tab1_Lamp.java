@@ -65,6 +65,12 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
     private boolean mBound = false;
     private TcpService.OnMessageReceived messageReceived = null;
 
+    //color preset constants
+    public static final long FOCUS = Long.decode("0x87d0ff");
+    public static final long NEUTRAL = Long.decode("0xfffec9");
+    public static final long RELAX = Long.decode("0xfff296");
+    public static boolean preset = false;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -134,6 +140,20 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
 
         seekBar.setProgress(activeLamp.getIntensity());
 
+        int color = activeLamp.getColor();
+
+        if(color == (int)FOCUS) {
+            b1.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.focus_light_selected));
+            preset = true;
+        }
+        if(color == (int)NEUTRAL) {
+            b2.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.neutral_light_selected));
+            preset = true;
+        }
+        if(color == (int)RELAX) {
+            b3.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.relax_light_selected));
+            preset = true;
+        }
         //if(mBound) {
 
            messageReceived = new TcpService.OnMessageReceived() {
@@ -146,7 +166,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
                         @Override
                         public void run() {
 
-                            // TODO Switch-method to set Lamp Attributes (board packets)
+                            //Switch-case method to set Lamp Attributes (board packets)
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                             Log.e("message: ", message);
 
@@ -272,18 +292,27 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
                 b1.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.focus_light_selected));
                 b2.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.neutral_light));
                 b3.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.relax_light));
+                myService.setMessage(setColor + "," + (int)FOCUS);
+                activeLamp.setColor((int)FOCUS);
+                preset = true;
                 break;
 
             case R.id.button2:
                 b1.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.focus_light));
                 b2.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.neutral_light_selected));
                 b3.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.relax_light));
+                myService.setMessage(setColor + "," + (int)NEUTRAL);
+                activeLamp.setColor((int)NEUTRAL);
+                preset = true;
                 break;
 
             case R.id.button3:
                 b1.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.focus_light));
                 b2.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.neutral_light));
                 b3.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.relax_light_selected));
+                myService.setMessage(setColor + "," + (int)RELAX);
+                activeLamp.setColor((int)RELAX);
+                preset = true;
                 break;
 
             default:
