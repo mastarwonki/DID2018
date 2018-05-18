@@ -35,7 +35,7 @@ import static java.lang.Thread.sleep;
  * Created by irene on 30/12/2017.
  */
 
-public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, Switch.OnCheckedChangeListener, EditText.OnFocusChangeListener, EditText.OnEditorActionListener{
+public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListener, Switch.OnCheckedChangeListener, EditText.OnFocusChangeListener, EditText.OnEditorActionListener{
 
     //lamp infos
     private int pos;
@@ -136,9 +136,9 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
         final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();
         activeLamp = lamps.get(pos);
 
-        b1 = view.findViewById(R.id.button);
+       /* b1 = view.findViewById(R.id.button);
         b2 = view.findViewById(R.id.button2);
-        b3 = view.findViewById(R.id.button3);
+        b3 = view.findViewById(R.id.button3); */
         switch1 = view.findViewById(R.id.switch1);
         seekBar = view.findViewById(R.id.seekBar);
         inclAngle = view1.findViewById(R.id.seekBar2);
@@ -150,7 +150,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
 
         int color = activeLamp.getColor();
 
-        if(color == (int)FOCUS) {
+       /* if(color == (int)FOCUS) {
             b1.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.focus_light_selected));
             preset = true;
         }
@@ -162,6 +162,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
             b3.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.relax_light_selected));
             preset = true;
         }
+        */
         //if(mBound) {
 
            messageReceived = new TcpService.OnMessageReceived() {
@@ -229,9 +230,9 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
             ImageView iv = view.findViewById(R.id.lampada);
             iv.setImageDrawable(activeLamp.getPicture());
 
-            b1.setOnClickListener(this);
+            /*b1.setOnClickListener(this);
             b2.setOnClickListener(this);
-            b3.setOnClickListener(this);
+            b3.setOnClickListener(this); */
 
             switch1.setOnCheckedChangeListener(this);
 
@@ -299,7 +300,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
     };
 
 
-    @Override
+   /* @Override
     public void onClick(View view) {
 
         switch(view.getId()) {
@@ -335,7 +336,7 @@ public class Tab1_Lamp extends Fragment implements View.OnClickListener, SeekBar
                 break;
         }
 
-    }
+    } */
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
