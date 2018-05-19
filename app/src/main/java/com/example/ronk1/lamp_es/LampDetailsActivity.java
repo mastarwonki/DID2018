@@ -53,8 +53,8 @@ public class LampDetailsActivity extends AppCompatActivity {
     private String url;
     private Lamp activeLamp = null;
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     public static Activity manager;
     public static boolean manager_running = false;
@@ -244,13 +244,9 @@ public class LampDetailsActivity extends AppCompatActivity {
                     tab1.setArguments(bundle);
                     return tab1;
                 case 1:
-                    Tab2_Color tab2 = new Tab2_Color();
+                    Tab2_Rotation tab2 = new Tab2_Rotation();
                     tab2.setArguments(bundle);
                     return tab2;
-                case 2:
-                    Tab3_Rotation tab3= new Tab3_Rotation();
-                    tab3.setArguments(bundle);
-                    return tab3;
             }
             return null;
         }
@@ -258,7 +254,7 @@ public class LampDetailsActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
@@ -269,8 +265,6 @@ public class LampDetailsActivity extends AppCompatActivity {
                     return "SECTION 1";
                 case 1:
                     return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
             }
             return null;
         }

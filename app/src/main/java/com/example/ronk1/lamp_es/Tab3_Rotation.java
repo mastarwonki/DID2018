@@ -89,7 +89,6 @@ public class Tab3_Rotation extends Fragment implements SeekBar.OnSeekBarChangeLi
                     @Override
                     public void run() {
 
-                        // TODO Switch-method to set Lamp Attributes (board packets)
                         //Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                         Log.e("message: ", message);
 

@@ -100,7 +100,6 @@ public class Tab2_Color extends Fragment implements View.OnClickListener{
                     @Override
                     public void run() {
 
-                        // TODO Switch-method to set Lamp Attributes (board packets)
                         //Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                         Log.e("message: ", message);
 

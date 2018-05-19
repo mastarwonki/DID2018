@@ -35,19 +35,19 @@
                 android:id="@+id/tabItem2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lamp" />
+                android:text="Color" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/tabItem3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Color" />
+                android:text="Rotation" />
 
-            <android.support.design.widget.TabItem
+           <!-- <android.support.design.widget.TabItem
                 android:id="@+id/tabItem4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rotation" />
+                android:text="Rotation" /> -->
 
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>

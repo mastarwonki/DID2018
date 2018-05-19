@@ -5,17 +5,17 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_margin="10dp"
-    android:background="#dddddd"
+    android:background="@drawable/ll_shape"
     android:id="@+id/lamp_item_wrapper"
     android:padding="8dp">
 
     <ImageView
         android:id="@+id/lamp_img"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_weight="0"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_weight="0"
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/lamp_name"
@@ -23,17 +23,11 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:layout_gravity="center"
-        android:paddingStart="4dp"
-        android:paddingEnd="0dp"
+        android:textAlignment="center"
+        android:layout_marginLeft="8dp"
         android:textSize="20dp"
+        android:textColor="#FFFFFF"
         android:text="Lamp"/>
-
-    <Switch
-        android:id="@+id/lamp_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:layout_gravity="center"/>
 
 
 </LinearLayout>

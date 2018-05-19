@@ -10,4 +10,6 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="blackMaterial">#1D2225</color>
+    <color name="darkAlpha">#CC3700B3</color>
+
  </resources>

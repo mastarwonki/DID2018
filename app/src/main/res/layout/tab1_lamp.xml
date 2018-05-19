@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -27,8 +26,8 @@
         android:id="@+id/color_picker_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:density="12"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,10 +51,9 @@
         android:id="@+id/seekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginStart="64dp"
-        app:layout_constraintBottom_toTopOf="@+id/timer"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="@+id/color_picker_view"
         app:layout_constraintStart_toStartOf="@+id/color_picker_view"
         app:layout_constraintTop_toBottomOf="@+id/color_picker_view" />
@@ -74,26 +72,31 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/timer"
+        app:layout_constraintEnd_toStartOf="@+id/timer"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/timer"
         app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
 
     <EditText
         android:id="@+id/timer"
-        android:layout_width="69dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="Timer"
+        android:layout_marginEnd="108dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="8dp"
+        android:ems="8"
+        android:hint="Timer (minutes)"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
 </android.support.constraint.ConstraintLayout>

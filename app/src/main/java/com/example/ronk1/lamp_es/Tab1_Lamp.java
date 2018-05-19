@@ -27,6 +27,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorChangedListener;
+import com.flask.colorpicker.OnColorSelectedListener;
+
 import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
@@ -51,6 +55,9 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
     private LampView_inclination lv;
     private SeekBar sb, seekBar, inclAngle;
     private EditText timer;
+    private int color;
+    private String hexcolor;
+    private ColorPickerView colorPickerView;
 
     //default messages
     private final String turnOn = "turnOn";
@@ -103,6 +110,9 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
         if(activeLamp != null) {
         switch1.setChecked(activeLamp.isOn());
         seekBar.setProgress(activeLamp.getIntensity()/lumStep);
+        colorPickerView.setInitialColor(activeLamp.getColor(), true);
+
+
         }
     }
 
@@ -131,11 +141,11 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
         intent.putExtra("IP", ip);
         View view = getLayoutInflater().inflate(R.layout.tab1_lamp, container, false);
         View view1 = getLayoutInflater().inflate(R.layout.tab3_rotation, container, false);
-
         LampManager lm = LampManager.getInstance();
         final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();
         activeLamp = lamps.get(pos);
 
+        getActivity().setTitle(activeLamp.getName());
        /* b1 = view.findViewById(R.id.button);
         b2 = view.findViewById(R.id.button2);
         b3 = view.findViewById(R.id.button3); */
@@ -147,8 +157,6 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
         switch1.setChecked(activeLamp.isOn());
 
         seekBar.setProgress(activeLamp.getIntensity());
-
-        int color = activeLamp.getColor();
 
        /* if(color == (int)FOCUS) {
             b1.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.focus_light_selected));
@@ -225,10 +233,10 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
                 }
             };
 
-            TextView tv = view.findViewById(R.id.lamp_name);
-            tv.setText(activeLamp.getName());
-            ImageView iv = view.findViewById(R.id.lampada);
-            iv.setImageDrawable(activeLamp.getPicture());
+            //TextView tv = view.findViewById(R.id.lamp_name);
+            //tv.setText(activeLamp.getName());
+            //ImageView iv = view.findViewById(R.id.lampada);
+            //iv.setImageDrawable(activeLamp.getPicture());
 
             /*b1.setOnClickListener(this);
             b2.setOnClickListener(this);
@@ -244,6 +252,32 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
 
             timer.setOnFocusChangeListener(this);
             timer.setOnEditorActionListener(this);
+
+        colorPickerView = view.findViewById(R.id.color_picker_view);
+        colorPickerView.setInitialColor(activeLamp.getColor(), true);
+        colorPickerView.addOnColorChangedListener(new OnColorChangedListener() {
+            @Override public void onColorChanged(int selectedColor) {
+                // Handle on color change
+                Log.d("ColorPicker", "onColorChanged: 0x" + Integer.toHexString(selectedColor));
+            }
+        });
+
+        colorPickerView.addOnColorSelectedListener((new OnColorSelectedListener() {
+            @Override
+            public void onColorSelected(int selectedColor) {
+                Toast.makeText(
+                        getContext(),
+                        "selectedColor: " + Integer.toHexString(selectedColor).toUpperCase(),
+                        Toast.LENGTH_SHORT).show();
+                //hexcolor = Integer.toHexString(selectedColor).toUpperCase();
+                //color = Long.decode("0x" + hexcolor);
+                color = selectedColor;
+                activeLamp.setColor(color);
+                myService.setMessage(setColor + "," + color);
+
+
+            }
+        }));
 
 
        // }

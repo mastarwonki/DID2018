@@ -62,15 +62,16 @@ public class LampListAdapter extends BaseAdapter {
         //Bitmap img = BitmapFactory.decodeResource(context.getResources(), R.drawable.lamp1);
         ImageView iv = view.findViewById(R.id.lamp_img);
         Picasso.get()
-                .load("http://i.imgur.com/DvpvklR.png")
+                .load("https://i.imgur.com/J4FPH26.png") //http://i.imgur.com/DvpvklR.png
                 .placeholder(R.drawable.lamp1)
-                .resize(200, 200)
+                .resize(100, 100)
                 .centerCrop()
+                .transform(new CircleTransform())
                 .into(iv);
         lamp.setPicture(iv.getDrawable());
         //iv.setImageBitmap(lamp.getPicture());
         // Populate Switch On-Off depending on lamp state
-        final Switch switchStatus = view.findViewById(R.id.lamp_switch);
+        /*final Switch switchStatus = view.findViewById(R.id.lamp_switch);
         if(lamp.isOn())
             switchStatus.setChecked(true);
         else
@@ -85,7 +86,7 @@ public class LampListAdapter extends BaseAdapter {
                     lamp.turnOff();
                 }
             }
-        });
+        }); */
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
