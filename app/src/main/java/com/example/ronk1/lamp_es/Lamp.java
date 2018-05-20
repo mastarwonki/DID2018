@@ -13,7 +13,7 @@ public class Lamp {
     private String URL;
     private int intensity = 15;
     private int hex = 0xFF4286f4;
-    private Drawable img;
+    private Bitmap img;
     //private int img_res;
     private boolean state;
     private long timestamp;
@@ -89,11 +89,11 @@ public class Lamp {
 
     }
 
-    public Drawable getPicture() {
+    public Bitmap getPicture() {
         return img;
     }
 
-    public void setPicture(Drawable img) {
+    public void setPicture(Bitmap img) {
 
         this.img = img;
     }

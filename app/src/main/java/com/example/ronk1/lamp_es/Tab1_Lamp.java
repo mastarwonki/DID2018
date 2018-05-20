@@ -1,5 +1,6 @@
 package com.example.ronk1.lamp_es;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorChangedListener;
 import com.flask.colorpicker.OnColorSelectedListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,7 @@ import static java.lang.Thread.sleep;
  * Created by irene on 30/12/2017.
  */
 
-public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListener, Switch.OnCheckedChangeListener, EditText.OnFocusChangeListener, EditText.OnEditorActionListener{
+public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListener, Switch.OnCheckedChangeListener, EditText.OnFocusChangeListener, EditText.OnEditorActionListener, View.OnClickListener{
 
     //lamp infos
     private int pos;
@@ -49,13 +51,15 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
     //variables
     //GUI
     private Switch switch1;
-    private Button b1;
+   /* private Button b1;
     private Button b2;
-    private Button b3;
+    private Button b3;*/
+    private Button b4;
     private LampView_inclination lv;
     private SeekBar sb, seekBar, inclAngle;
     private EditText timer;
     private int color;
+    private long color2;
     private String hexcolor;
     private ColorPickerView colorPickerView;
 
@@ -140,7 +144,7 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
         Intent intent = new Intent(context, TcpService.class);
         intent.putExtra("IP", ip);
         View view = getLayoutInflater().inflate(R.layout.tab1_lamp, container, false);
-        View view1 = getLayoutInflater().inflate(R.layout.tab3_rotation, container, false);
+        //View view1 = getLayoutInflater().inflate(R.layout.tab3_rotation, container, false);
         LampManager lm = LampManager.getInstance();
         final ArrayList<Lamp> lamps = (ArrayList<Lamp>) lm.getLamps();
         activeLamp = lamps.get(pos);
@@ -149,9 +153,13 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
        /* b1 = view.findViewById(R.id.button);
         b2 = view.findViewById(R.id.button2);
         b3 = view.findViewById(R.id.button3); */
+        b4 = view.findViewById(R.id.button4);
+        hexcolor = Integer.toHexString(activeLamp.getColor()).toUpperCase();
+        color2 = Long.decode("0x" + hexcolor);
+        b4.setBackgroundColor((int)color2);
         switch1 = view.findViewById(R.id.switch1);
         seekBar = view.findViewById(R.id.seekBar);
-        inclAngle = view1.findViewById(R.id.seekBar2);
+        //inclAngle = view1.findViewById(R.id.seekBar2);
         timer = view.findViewById(R.id.timer);
 
         switch1.setChecked(activeLamp.isOn());
@@ -215,11 +223,11 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
                                     break;
 
                                 case "Connection Refused":
-                                    //getActivity().finish();
+                                    getActivity().finish();
                                     break;
 
                                 case "Connection Stopped":
-                                    //getActivity().finish();
+                                    getActivity().finish();
                                     break;
 
                                 default:
@@ -233,15 +241,22 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
                 }
             };
 
-            //TextView tv = view.findViewById(R.id.lamp_name);
-            //tv.setText(activeLamp.getName());
-            //ImageView iv = view.findViewById(R.id.lampada);
-            //iv.setImageDrawable(activeLamp.getPicture());
+            TextView tv = view.findViewById(R.id.lamp_name);
+            tv.setText(activeLamp.getName());
+            ImageView iv = view.findViewById(R.id.imageView3);
+            iv.setImageBitmap(activeLamp.getPicture());
+       /* Picasso.get()
+                .load(String.valueOf(activeLamp.getPicture())) //http://i.imgur.com/DvpvklR.png
+                .placeholder(activeLamp.getPicture())
+                .resize(50, 50)
+                .centerCrop()
+                .transform(new CircleTransform())
+                .into(iv); */
 
             /*b1.setOnClickListener(this);
             b2.setOnClickListener(this);
             b3.setOnClickListener(this); */
-
+            b4.setOnClickListener(this);
             switch1.setOnCheckedChangeListener(this);
 
             seekBar.setMax(seekMax);
@@ -269,11 +284,12 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
                         getContext(),
                         "selectedColor: " + Integer.toHexString(selectedColor).toUpperCase(),
                         Toast.LENGTH_SHORT).show();
-                //hexcolor = Integer.toHexString(selectedColor).toUpperCase();
-                //color = Long.decode("0x" + hexcolor);
+                hexcolor = Integer.toHexString(selectedColor).toUpperCase();
+                color2 = Long.decode("0x" + hexcolor);
                 color = selectedColor;
-                activeLamp.setColor(color);
-                myService.setMessage(setColor + "," + color);
+                b4.setBackgroundColor((int)color2);
+                /*activeLamp.setColor(color);
+                myService.setMessage(setColor + "," + color); */
 
 
             }
@@ -427,5 +443,21 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
             timer.clearFocus();
         }
         return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch(view.getId()) {
+
+            case R.id.button4:
+                myService.setMessage(setColor + "," + color);
+                activeLamp.setColor(color);
+                break;
+
+            default:
+                break;
+        }
+
     }
 }

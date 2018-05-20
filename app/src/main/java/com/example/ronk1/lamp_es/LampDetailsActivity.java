@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 import static com.example.ronk1.lamp_es.Tab1_Lamp.preset;
 
-public class LampDetailsActivity extends AppCompatActivity {
+public class LampDetailsActivity extends AppCompatActivity{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

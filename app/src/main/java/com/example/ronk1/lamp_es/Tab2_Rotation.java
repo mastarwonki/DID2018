@@ -1,6 +1,7 @@
 package com.example.ronk1.lamp_es;
 
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -59,11 +61,6 @@ public class Tab2_Rotation extends Fragment {
         mBound = false;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -74,17 +71,21 @@ public class Tab2_Rotation extends Fragment {
         activeLamp = lm.getLamps().get(pos);
 
         Drawable mDrawable = context.getResources().getDrawable(R.drawable.seekbar_thumb);
-        mDrawable.setColorFilter(new PorterDuffColorFilter(activeLamp.getColor(), PorterDuff.Mode.MULTIPLY));
+        mDrawable.setColorFilter(new PorterDuffColorFilter(activeLamp.getColor(), PorterDuff.Mode.DST_ATOP));
 
         seekArc = view.findViewById(R.id.seekArc);
         seekArc.setProgress(activeLamp.getInclination());
         seekArc.setProgressColor(activeLamp.getColor());
         seekArc2 = view.findViewById(R.id.seekArc2);
         seekArc2.setProgress(activeLamp.getInclination());
+        seekArc2.setProgressColor(activeLamp.getColor());
         seekArc3 = view.findViewById(R.id.seekArc3);
         seekArc3.setProgress(activeLamp.getRotation());
+        seekArc3.setProgressColor(activeLamp.getColor());
         textView = view.findViewById(R.id.textView);
+        textView.setText(String.valueOf(activeLamp.getInclination()) + "°");
         textView2 = view.findViewById(R.id.textView2);
+        textView2.setText(String.valueOf(activeLamp.getRotation()) + "°");
 
         seekArc.setOnSeekArcChangeListener(new SeekArc.OnSeekArcChangeListener() {
 
@@ -95,13 +96,17 @@ public class Tab2_Rotation extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekArc seekArc) {
+            public void onStartTrackingTouch(SeekArc seek) {
+                seekArc.setProgressColor(activeLamp.getColor());
+                seekArc2.setProgressColor(activeLamp.getColor());
+                seekArc3.setProgressColor(activeLamp.getColor());
             }
 
             @Override
-            public void onProgressChanged(SeekArc seekArc, int progress, boolean fromUser) {
+            public void onProgressChanged(SeekArc seek, int progress, boolean fromUser) {
                 angle = progress;
-                textView.setText(String.valueOf(progress));
+                textView.setText(String.valueOf(angle)+ "°");
+                if(fromUser)
                 seekArc2.setProgress(progress);
             }
         });
@@ -115,14 +120,19 @@ public class Tab2_Rotation extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekArc seekArc) {
+            public void onStartTrackingTouch(SeekArc seek) {
+                seekArc.setProgressColor(activeLamp.getColor());
+                seekArc2.setProgressColor(activeLamp.getColor());
+                seekArc3.setProgressColor(activeLamp.getColor());
             }
 
             @Override
-            public void onProgressChanged(SeekArc seekArc, int progress, boolean fromUser) {
+            public void onProgressChanged(SeekArc seek, int progress, boolean fromUser) {
                 angle = progress;
-                textView.setText(String.valueOf(progress));
-                seekArc.setProgress(progress);
+                textView.setText(String.valueOf(angle)+ "°");
+                if(fromUser)
+                    seekArc.setProgress(progress);
+
             }
         });
 
@@ -135,17 +145,20 @@ public class Tab2_Rotation extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekArc seekArc) {
+            public void onStartTrackingTouch(SeekArc seek) {
+                seekArc.setProgressColor(activeLamp.getColor());
+                seekArc2.setProgressColor(activeLamp.getColor());
+                seekArc3.setProgressColor(activeLamp.getColor());
             }
 
             @Override
             public void onProgressChanged(SeekArc seekArc, int progress, boolean fromUser) {
 
-                if(progress < 164) angle = progress;
+                if (progress < 164) angle = progress;
 
                 else angle = 164;
 
-                textView2.setText(String.valueOf(angle));
+                textView2.setText(String.valueOf(angle)+ "°");
             }
         });
 
@@ -159,9 +172,28 @@ public class Tab2_Rotation extends Fragment {
             myService = binder.getService();
             mBound = true;
         }
+
         public void onServiceDisconnected(ComponentName arg0) {
             mBound = false;
             myService = null;
         }
     };
+
+   /* @Override
+    public void colorChanged(int color) {
+
+        Handler handler = new Handler(getActivity().getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                seekArc.setProgressColor(activeLamp.getColor());
+                seekArc2.setProgressColor(activeLamp.getColor());
+                seekArc3.setProgressColor(activeLamp.getColor());
+            }
+        };
+
+        handler.post(runnable);
+
+    } */
+
 }

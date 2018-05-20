@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -62,14 +64,29 @@ public class LampListAdapter extends BaseAdapter {
         //Bitmap img = BitmapFactory.decodeResource(context.getResources(), R.drawable.lamp1);
         ImageView iv = view.findViewById(R.id.lamp_img);
         Picasso.get()
-                .load("https://i.imgur.com/J4FPH26.png") //http://i.imgur.com/DvpvklR.png
-                .placeholder(R.drawable.lamp1)
+                .load("https://i.imgur.com/J4FPH26.png")
+                .placeholder(R.drawable.lamp1) //http://i.imgur.com/DvpvklR.png
                 .resize(100, 100)
                 .centerCrop()
                 .transform(new CircleTransform())
-                .into(iv);
-        lamp.setPicture(iv.getDrawable());
-        //iv.setImageBitmap(lamp.getPicture());
+                .into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                lamp.setPicture(bitmap);
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });
+
+        iv.setImageBitmap(lamp.getPicture());
         // Populate Switch On-Off depending on lamp state
         /*final Switch switchStatus = view.findViewById(R.id.lamp_switch);
         if(lamp.isOn())
