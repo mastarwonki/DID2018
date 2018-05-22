@@ -66,6 +66,8 @@ public class LampAsyncTask extends AsyncTask<String,Integer, Long> {
                     String[] str = message.split(",");
                     Lamp lamp = new Lamp(str[0]);
                     lamp.setName(str[1]);
+                    if(str.length >2)
+                    lamp.setPicture(str[2]);
                     LampManager.getInstance().addLamp(lamp, lamp.getURL());
                 } else {
                     String hostIP = packet.getAddress().getHostAddress().trim();

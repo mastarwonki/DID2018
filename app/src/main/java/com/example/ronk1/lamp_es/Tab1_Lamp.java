@@ -244,14 +244,14 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
             TextView tv = view.findViewById(R.id.lamp_name);
             tv.setText(activeLamp.getName());
             ImageView iv = view.findViewById(R.id.imageView3);
-            iv.setImageBitmap(activeLamp.getPicture());
-       /* Picasso.get()
+
+            Picasso.get()
                 .load(String.valueOf(activeLamp.getPicture())) //http://i.imgur.com/DvpvklR.png
-                .placeholder(activeLamp.getPicture())
+                .placeholder(R.drawable.lamp1)
                 .resize(50, 50)
                 .centerCrop()
                 .transform(new CircleTransform())
-                .into(iv); */
+                .into(iv);
 
             /*b1.setOnClickListener(this);
             b2.setOnClickListener(this);

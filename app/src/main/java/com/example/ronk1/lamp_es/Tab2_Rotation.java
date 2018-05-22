@@ -141,7 +141,7 @@ public class Tab2_Rotation extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekArc seekArc) {
                 activeLamp.setRotation(angle);
-                myService.setMessage(setIncl + "," + angle);
+                myService.setMessage(setRot + "," + angle);
             }
 
             @Override
