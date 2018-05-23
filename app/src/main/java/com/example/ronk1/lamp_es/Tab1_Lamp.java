@@ -114,27 +114,38 @@ public class Tab1_Lamp extends Fragment implements SeekBar.OnSeekBarChangeListen
         if(activeLamp != null) {
         switch1.setChecked(activeLamp.isOn());
         seekBar.setProgress(activeLamp.getIntensity()/lumStep);
-        colorPickerView.setInitialColor(activeLamp.getColor(), true);
+        //colorPickerView.setInitialColor(activeLamp.getColor(), true);
 
 
         }
     }
 
-   /* @Override
+   @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-            savedInstanceState.putBoolean("Sent", sent);
+            savedInstanceState.putInt("color", color);
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Restore UI state from the savedInstanceState.
-        // This bundle has also been passed to onCreate.
-        if(savedInstanceState != null)
-        sent = savedInstanceState.getBoolean("Sent");
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState != null) {
+            color = savedInstanceState.getInt("color", 0);
+            colorPickerView.setInitialColor(color, true);
+            b4.setBackgroundColor(color);
+        }
     }
-*/
+
+    /*
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            // Restore UI state from the savedInstanceState.
+            // This bundle has also been passed to onCreate.
+            if(savedInstanceState != null)
+            sent = savedInstanceState.getBoolean("Sent");
+        }
+    */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
